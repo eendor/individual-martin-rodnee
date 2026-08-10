@@ -1,3 +1,5 @@
 Git Demonstration
 
 Hello World!
+
+Git is awesome.
