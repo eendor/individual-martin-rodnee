@@ -1,0 +1,11 @@
+<!-- Django Templates are HTML files that allow dynamic content rendering by combining static HTML with data passed from views. -->
+
+{% if todoitem_list %}
+    <ul>
+    {% for todoitem in todoitem_list %}
+        <li><a href="/todolist/{{ todoitem.id }}/">{{ todoitem.task_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tasks have been created.</p>
+{% endif %}
