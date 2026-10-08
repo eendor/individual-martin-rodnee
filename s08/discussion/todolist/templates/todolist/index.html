@@ -1,0 +1,15 @@
+<!-- Django Templates are HTML files that allow dynamic content rendering by combining static HTML with data passed from views. -->
+
+{% if todoitem_list and not user.is_anonymous %}
+    <h1>Welcome {{user.first_name}} {{user.last_name}}! </h1>
+    <ul>
+    {% for todoitem in todoitem_list %}
+        <li><a href="/todolist/{{ todoitem.id }}/">{{ todoitem.task_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% elif not todoitem_list and not user.is_anonymous %}
+    <p>No tasks have been created.</p>
+{% else %}
+    <h1>You are not authorized to access this page.</h1>
+    <p>Kindly login <a href="{% url 'login' %}">here.</a> </p>
+{% endif %}
