@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<!--
+{% if not is_user_authenticated %}
+    <h1>Something went wrong.</h1>
+    <p>Please contact your administrator or reset your password.</p>
+{% endif %}
+-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <h1 class="text-center my-3">Login</h1>
+            
+            <!-- Display error message if login failed -->
+            {% if error %}
+                <p class="text-danger">Invalid user credentials, please check your username and password</p>
+            {% endif %}
+
+            <!-- Login form that posts data to the login view -->
+            <form action="{% url 'todolist:login' %}" method="post">
+
+                <!-- CSRF token for security to prevent cross-site request forgery attacks -->
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="username">Username: </label>
+                    <input class="form-control" id="username" type="text" name="username" value="{{ username }}" maxlength="20" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password">Password: </label>
+                    <input class="form-control" id="password" type="password" name="password" value="{{ password }}" maxlength="20" required>
+                </div>
+
+                <div class="text-center">
+                    <input class="btn btn-success" type="submit" value="Login">
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
