@@ -8,14 +8,14 @@ from .models import ToDoItem
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
-from .forms import LoginForm, AddTaskForm
+from .forms import LoginForm, AddTaskForm, UpdateTaskForm
 
 
 # A view function in Django accepts an HTTP request object as a parameter
 def index(request):
 	# The function returns an HttpResponse object containing the content you want to send back to the client.
 	# return HttpResponse("Hello from views.py file.")
-	todoitem_list = ToDoItem.objects.all()
+	todoitem_list = ToDoItem.objects.filter(user_id=request.user.id)
 	context = {
 		'todoitem_list': todoitem_list,
 		'user': request.user,
@@ -139,4 +139,38 @@ def add_task(request):
 
 	# Render the "add_task.html" template with the form and context data.
 	return render(request, "todolist/add_task.html", context)
+
+def update_task(request, todoitem_id):
+	todoitem = ToDoItem.objects.get(pk=todoitem_id, user=request.user)
+	form = UpdateTaskForm(request.POST or None)
+
+	context = {
+		'form': form,
+		'todoitem': todoitem,
+		'task_name': todoitem.task_name,
+		'description': todoitem.description,
+		'status': todoitem.status,
+	}
+
+	if request.method == 'POST':
+		if form.is_valid():
+			task_name = form.cleaned_data['task_name']
+			description = form.cleaned_data['description']
+			status = form.cleaned_data['status']
+
+			todoitem.task_name = task_name
+			todoitem.description = description
+			todoitem.status = status
+			todoitem.save()
+
+			return redirect("todolist:index")
+		else:
+			context["error"] = "Please correct the errors below"
+
+	return render(request, "todolist/update_task.html", context)
+
+def delete_task(request, todoitem_id):
+	todoitem = ToDoItem.objects.filter(id=todoitem_id, user=request.user)
+	todoitem.delete()
+	return redirect("todolist:index")
 

@@ -7,3 +7,9 @@ class LoginForm(forms.Form):
 class AddTaskForm(forms.Form):
     task_name = forms.CharField(label='Task Name', max_length=50)
     description = forms.CharField(label='Description', max_length=200)
+
+class UpdateTaskForm(forms.Form):
+    task_name = forms.CharField(label='Task Name', max_length=50)
+    description = forms.CharField(label='Description', max_length=200)
+    status = forms.CharField(label='Status', max_length=50)
+
